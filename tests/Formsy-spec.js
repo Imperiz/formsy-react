@@ -427,37 +427,6 @@ export default {
 
     },
 
-    'should be possible to pass error state of elements by changing an errors attribute': function (test) {
-
-      const TestForm = React.createClass({
-        getInitialState() { return { validationErrors: { foo: 'bar' } }; },
-        onChange(values) {
-            this.setState(values.foo ? { validationErrors: {} } : { validationErrors: {foo: 'bar'} });
-        },
-        render() {
-          return (
-            <Formsy.Form onChange={this.onChange} validationErrors={this.state.validationErrors}>
-              <TestInput name="foo"/>
-            </Formsy.Form>);
-        }
-      });
-      const form = TestUtils.renderIntoDocument(<TestForm/>);
-
-      // Wait for update
-      immediate(() => {
-        const input = TestUtils.findRenderedComponentWithType(form, TestInput);
-        test.equal(input.getErrorMessage(), 'bar');
-        input.setValue('gotValue');
-
-        // Wait for update
-        immediate(() => {
-          test.equal(input.getErrorMessage(), null);
-          test.done();
-        });
-      });
-
-    },
-
     'should trigger an onValidSubmit when submitting a valid form': function (test) {
 
       let isCalled = sinon.spy();

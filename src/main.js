@@ -103,16 +103,19 @@ Formsy.Form = React.createClass({
 
   // Update model, submit to url prop and send the model
   submit: function (event) {
+    var self = this;
 
     event && event.preventDefault();
 
-    // Trigger form as not pristine.
-    // If any inputs have not been touched yet this will make them dirty
-    // so validation becomes visible (if based on isPristine)
-    this.setFormPristine(false);
-    var model = this.getModel();
-    this.props.onSubmit(model, this.resetModel, this.updateInputsWithError);
-    this.state.isValid ? this.props.onValidSubmit(model, this.resetModel, this.updateInputsWithError) : this.props.onInvalidSubmit(model, this.resetModel, this.updateInputsWithError);
+    this.validateForm(function () {
+      // Trigger form as not pristine.
+      // If any inputs have not been touched yet this will make them dirty
+      // so validation becomes visible (if based on isPristine)
+      self.setFormPristine(false);
+      var model = self.getModel();
+      self.props.onSubmit(model, self.resetModel, self.updateInputsWithError);
+      self.state.isValid ? self.props.onValidSubmit(model, self.resetModel, self.updateInputsWithError) : self.props.onInvalidSubmit(model, self.resetModel, self.updateInputsWithError);
+    });
 
   },
 
@@ -241,7 +244,7 @@ Formsy.Form = React.createClass({
       _isRequired: validation.isRequired,
       _validationError: validation.error,
       _externalError: null
-    }, this.validateForm);
+    });
 
   },
 
@@ -353,7 +356,7 @@ Formsy.Form = React.createClass({
 
   // Validate the form by going through all child input components
   // and check their state
-  validateForm: function () {
+  validateForm: function (complete) {
 
     // We need a callback as we are validating all inputs again. This will
     // run when the last component has set its state
@@ -364,7 +367,7 @@ Formsy.Form = React.createClass({
 
       this.setState({
         isValid: allIsValid
-      });
+      }, complete? complete: undefined);
 
       if (allIsValid) {
         this.props.onValid();

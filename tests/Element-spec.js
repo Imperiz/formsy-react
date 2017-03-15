@@ -261,42 +261,6 @@ export default {
 
   },
 
-  'should be able to run a function to validate': function (test) {
-
-    const TestForm = React.createClass({
-      customValidationA(values, value) {
-        return value === 'foo';
-      },
-      customValidationB(values, value) {
-        return value === 'foo' && values.A === 'foo';
-      },
-      render() {
-        return (
-          <Formsy.Form>
-            <TestInput name="A" validations={{
-              custom: this.customValidationA
-            }} value="foo"/>
-            <TestInput name="B" validations={{
-              custom: this.customValidationB
-            }} value="foo"/>
-          </Formsy.Form>
-        );
-      }
-    });
-    const form = TestUtils.renderIntoDocument(<TestForm/>);
-
-    const inputComponent = TestUtils.scryRenderedComponentsWithType(form, TestInput);
-    test.equal(inputComponent[0].isValid(), true);
-    test.equal(inputComponent[1].isValid(), true);
-    const input = TestUtils.scryRenderedDOMComponentsWithTag(form, 'INPUT');
-    TestUtils.Simulate.change(input[0], {target: {value: 'bar'}});
-    test.equal(inputComponent[0].isValid(), false);
-    test.equal(inputComponent[1].isValid(), false);
-
-    test.done();
-
-  },
-
   'should not override error messages with error messages passed by form if passed eror messages is an empty object': function (test) {
 
     const TestForm = React.createClass({

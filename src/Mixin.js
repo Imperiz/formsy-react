@@ -94,10 +94,6 @@ module.exports = {
       this.setValue(this.props.value);
     }
 
-    // If validations or required is changed, run a new validation
-    if (!utils.isSame(this.props.validations, prevProps.validations) || !utils.isSame(this.props.required, prevProps.required)) {
-      this.context.formsy.validate(this);
-    }
   },
 
   // Detach it when component unmounts
