@@ -73,6 +73,10 @@ Formsy.Form = React.createClass({
   componentDidMount: function () {
     if (this.props.validateOnMount) {
       this.validateForm();
+    } else {
+      this.setState({
+        canChange: true
+      });
     }
   },
 
